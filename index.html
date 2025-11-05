@@ -234,48 +234,87 @@
             const rightKnee = keypoints[14];
             const leftAnkle = keypoints[15];
             const rightAnkle = keypoints[16];
-            const leftElbow = keypoints[7];
-            const rightElbow = keypoints[8];
 
-            if (leftShoulder.score > MIN_CONFIDENCE && rightShoulder.score > MIN_CONFIDENCE &&
-                leftHip.score > MIN_CONFIDENCE && rightHip.score > MIN_CONFIDENCE) {
-                
+            if (leftShoulder.score > MIN_CONFIDENCE && leftHip.score > MIN_CONFIDENCE && leftKnee.score > MIN_CONFIDENCE) {
                 const leftSideAngle = calculateAngle(leftShoulder, leftHip, leftKnee);
-                const rightSideAngle = calculateAngle(rightShoulder, rightHip, rightKnee);
                 
                 if (leftSideAngle > 165 && leftSideAngle < 180) {
                     overallScore += 25;
-                    feedback.push({ text: '✓ Left side alignment good', type: 'success' });
+                    feedback.push({ 
+                        text: '✓ Perfect left side alignment', 
+                        detail: 'Your left side is straight and well-aligned. Keep this position.',
+                        type: 'success' 
+                    });
                 } else if (leftSideAngle > 155) {
                     overallScore += 15;
-                    feedback.push({ text: '⚠ Straighten left side more', type: 'warning' });
+                    feedback.push({ 
+                        text: '⚠ Left side needs straightening', 
+                        detail: `Your left side angle is ${leftSideAngle.toFixed(0)}°. Engage your core and stand taller to reach 170-180°. Imagine a string pulling you up from the crown of your head.`,
+                        type: 'warning' 
+                    });
                 } else {
-                    feedback.push({ text: '✗ Left side needs correction', type: 'error' });
-                }
-                checks++;
-
-                if (rightSideAngle > 165 && rightSideAngle < 180) {
-                    overallScore += 25;
-                    feedback.push({ text: '✓ Right side alignment good', type: 'success' });
-                } else if (rightSideAngle > 155) {
-                    overallScore += 15;
-                    feedback.push({ text: '⚠ Straighten right side more', type: 'warning' });
-                } else {
-                    feedback.push({ text: '✗ Right side needs correction', type: 'error' });
+                    feedback.push({ 
+                        text: '✗ Left side alignment needs work', 
+                        detail: `Current angle: ${leftSideAngle.toFixed(0)}°. Stand up straight with your weight evenly distributed. Roll your shoulders back and down, lift your chest, and lengthen your spine.`,
+                        type: 'error' 
+                    });
                 }
                 checks++;
             }
 
-            if (leftAnkle.score > MIN_CONFIDENCE && rightAnkle.score > MIN_CONFIDENCE) {
+            if (rightShoulder.score > MIN_CONFIDENCE && rightHip.score > MIN_CONFIDENCE && rightKnee.score > MIN_CONFIDENCE) {
+                const rightSideAngle = calculateAngle(rightShoulder, rightHip, rightKnee);
+                
+                if (rightSideAngle > 165 && rightSideAngle < 180) {
+                    overallScore += 25;
+                    feedback.push({ 
+                        text: '✓ Perfect right side alignment', 
+                        detail: 'Your right side is straight and well-aligned. Maintain this posture.',
+                        type: 'success' 
+                    });
+                } else if (rightSideAngle > 155) {
+                    overallScore += 15;
+                    feedback.push({ 
+                        text: '⚠ Right side needs straightening', 
+                        detail: `Your right side angle is ${rightSideAngle.toFixed(0)}°. Stand taller and engage your leg muscles. Distribute weight evenly on both feet to reach 170-180°.`,
+                        type: 'warning' 
+                    });
+                } else {
+                    feedback.push({ 
+                        text: '✗ Right side alignment needs work', 
+                        detail: `Current angle: ${rightSideAngle.toFixed(0)}°. Straighten your posture. Keep your knees straight but not locked, and align your ears over shoulders over hips over ankles.`,
+                        type: 'error' 
+                    });
+                }
+                checks++;
+            }
+
+            if (leftAnkle.score > MIN_CONFIDENCE && rightAnkle.score > MIN_CONFIDENCE && 
+                leftHip.score > MIN_CONFIDENCE && rightHip.score > MIN_CONFIDENCE) {
                 const feetDistance = getDistance(leftAnkle, rightAnkle);
                 const hipDistance = getDistance(leftHip, rightHip);
+                const ratio = feetDistance / hipDistance;
                 
-                if (feetDistance < hipDistance * 1.5) {
+                if (ratio < 1.2) {
                     overallScore += 25;
-                    feedback.push({ text: '✓ Feet position correct', type: 'success' });
+                    feedback.push({ 
+                        text: '✓ Feet positioned correctly', 
+                        detail: 'Your feet are properly together with inner edges touching. Great balance!',
+                        type: 'success' 
+                    });
+                } else if (ratio < 1.5) {
+                    overallScore += 15;
+                    feedback.push({ 
+                        text: '⚠ Feet slightly too far apart', 
+                        detail: 'Bring your feet closer together. The inner edges of your feet should touch or be very close. This creates a strong foundation.',
+                        type: 'warning' 
+                    });
                 } else {
-                    overallScore += 10;
-                    feedback.push({ text: '⚠ Bring feet closer together', type: 'warning' });
+                    feedback.push({ 
+                        text: '✗ Feet too far apart', 
+                        detail: 'Move your feet together until the inner edges touch. Stand with big toes touching and heels slightly apart. Press all four corners of each foot into the ground.',
+                        type: 'error' 
+                    });
                 }
                 checks++;
             }
@@ -284,19 +323,51 @@
                 const shoulderLevel = Math.abs(leftShoulder.y - rightShoulder.y);
                 const shoulderWidth = Math.abs(leftShoulder.x - rightShoulder.x);
                 
-                if (shoulderLevel < shoulderWidth * 0.1) {
+                if (shoulderLevel < shoulderWidth * 0.08) {
                     overallScore += 25;
-                    feedback.push({ text: '✓ Shoulders level', type: 'success' });
+                    feedback.push({ 
+                        text: '✓ Shoulders perfectly level', 
+                        detail: 'Your shoulders are evenly balanced. Keep them relaxed and away from your ears.',
+                        type: 'success' 
+                    });
+                } else if (shoulderLevel < shoulderWidth * 0.15) {
+                    overallScore += 15;
+                    feedback.push({ 
+                        text: '⚠ Shoulders slightly uneven', 
+                        detail: 'Level your shoulders by lowering the higher one. Imagine both shoulders being pulled gently down and back. Keep them relaxed, not tense.',
+                        type: 'warning' 
+                    });
                 } else {
-                    overallScore += 10;
-                    feedback.push({ text: '⚠ Level your shoulders', type: 'warning' });
+                    feedback.push({ 
+                        text: '✗ Shoulders need leveling', 
+                        detail: 'One shoulder is significantly higher. Roll both shoulders up, back, and down. Relax your neck and keep shoulders away from ears. Check yourself in the mirror.',
+                        type: 'error' 
+                    });
                 }
                 checks++;
             }
 
-            const maxPossibleScore = checks * 25;
-            const finalScore = maxPossibleScore > 0 ? (overallScore / maxPossibleScore) * 100 : 0;
-            return { score: finalScore, feedback };
+            const totalChecks = 4;
+            const totalPossibleScore = totalChecks * 25;
+            const minChecksRequired = 3;
+            
+            const finalScore = (overallScore / totalPossibleScore) * 100;
+            
+            if (checks === 0) {
+                feedback.unshift({ 
+                    text: '⚠ Position yourself in frame', 
+                    detail: 'Step back so your full body is visible in the camera. Make sure there\'s good lighting and you\'re facing the camera directly.',
+                    type: 'warning' 
+                });
+            } else if (checks < minChecksRequired) {
+                feedback.unshift({ 
+                    text: '⚠ Partial view detected', 
+                    detail: `Only ${checks} of ${totalChecks} pose checks visible. Position yourself so your full body is in frame for accurate scoring. Turn slightly toward the camera if needed.`,
+                    type: 'warning' 
+                });
+            }
+            
+            return { score: finalScore, feedback, checksPerformed: checks, totalChecks: totalChecks };
         }
 
         function validateAdhoMukhaSvanasana(keypoints) {
@@ -687,11 +758,13 @@
                         });
 
                         const feedbackEl = document.getElementById('pose-feedback');
+                        const detailedFeedbackEl = document.getElementById('detailed-feedback');
+                        
                         if (feedbackEl) {
                             const scoreColor = getColorForScore(validation.score);
                             let feedbackHTML = `
                                 <div class="mb-2">
-                                    <span class="font-bold text-lg">Pose Score: </span>
+                                    <span class="font-bold text-lg">Score: </span>
                                     <span class="font-bold text-xl" style="color: ${scoreColor}">
                                         ${Math.round(validation.score)}%
                                     </span>
@@ -707,6 +780,30 @@
                             
                             feedbackHTML += '</div>';
                             feedbackEl.innerHTML = feedbackHTML;
+                        }
+                        
+                        if (detailedFeedbackEl) {
+                            let detailedHTML = '';
+                            
+                            if (validation.feedback.length === 0) {
+                                detailedHTML = '<p class="text-gray-400">Position yourself fully in frame to begin pose analysis...</p>';
+                            } else {
+                                validation.feedback.forEach((item, index) => {
+                                    const iconColor = item.type === 'success' ? 'text-green-400' : 
+                                                     item.type === 'warning' ? 'text-yellow-400' : 'text-red-400';
+                                    const bgColor = item.type === 'success' ? 'bg-green-900 bg-opacity-20' : 
+                                                   item.type === 'warning' ? 'bg-yellow-900 bg-opacity-20' : 'bg-red-900 bg-opacity-20';
+                                    
+                                    detailedHTML += `
+                                        <div class="${bgColor} rounded-lg p-3 border-l-4 ${item.type === 'success' ? 'border-green-400' : item.type === 'warning' ? 'border-yellow-400' : 'border-red-400'}">
+                                            <div class="font-semibold ${iconColor} mb-1">${index + 1}. ${item.text}</div>
+                                            <div class="text-gray-300 text-xs leading-relaxed">${item.detail}</div>
+                                        </div>
+                                    `;
+                                });
+                            }
+                            
+                            detailedFeedbackEl.innerHTML = detailedHTML;
                         }
                     }
                 } catch (error) {
@@ -967,6 +1064,13 @@
                                     <div class="pose-label">
                                         <div class="font-semibold" id="pose-name-label"></div>
                                         <div class="text-xs text-gray-300" id="pose-sanskrit-label"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-4 bg-gray-800 rounded-xl p-4 max-h-64 overflow-y-auto">
+                                    <h4 class="text-md font-semibold text-primary mb-3">Correction Guidance</h4>
+                                    <div id="detailed-feedback" class="space-y-2 text-sm">
+                                        <p class="text-gray-400">Position yourself in front of the camera and start the pose...</p>
                                     </div>
                                 </div>
                             </div>
