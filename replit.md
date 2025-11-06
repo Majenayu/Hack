@@ -204,29 +204,26 @@ finalScore = (overallScore / (checks * 25)) * 100
 - Canvas overlay prevents video reprocessing
 - Efficient skeleton connection algorithm
 
-### Recent Changes (November 5, 2025)
+### Recent Changes (November 6, 2025)
+- **Complete Platform Migration**: Successfully migrated and enhanced SUNDAY yoga platform to work on both Android and laptop devices
+  - **Dashboard**: Full progress tracking with posture score, streak counter, calories burned widgets
+  - **Routine Page**: Personalized yoga sequences with wellness tracking (sleep, stress, hydration)
+  - **Virtual Assistant**: Gemini 2.5 Flash AI integration with markdown formatting for yoga/wellness guidance
+  - **Asana Library**: Complete pose database with benefits, precautions, and targeted areas
+  - **AR Correction**: Real-time camera feedback with pose validation (MIN_CONFIDENCE bug fixed)
+  - **Responsive Design**: Mobile-first with Tailwind CSS breakpoints (md:) for seamless Android/laptop experience
+  - **Voice Commands**: Browser Speech Recognition API for hands-free navigation ("go to dashboard", "start routine", etc.)
+  - **Security**: Removed hardcoded API keys, now uses environment variables (__gemini_api_key) only
+
+### Recent Bug Fixes (November 6, 2025)
+- **AR Correction MIN_CONFIDENCE Fix** (Critical):
+  - Fixed bug where `this.MIN_CONFIDENCE` was undefined, causing all low-confidence keypoints to pass validation
+  - Changed to module-level `MIN_CONFIDENCE` constant for proper pose detection threshold
+  - Now properly filters keypoints with score < 0.3 for accurate pose feedback
+
+### Previous Changes (November 5, 2025)
 - **Side-by-Side Reference Pose Display**: Added reference pose images alongside user's camera feed in AR correction mode
-  - Users now see correct pose reference image next to their live camera feed
-  - Reference images for all 4 poses (Tadasana, Downward Dog, Warrior III, Namaste)
-  - Responsive grid layout: side-by-side on desktop, stacked on mobile
-  - Reference images stored in `assets/poses/` directory
 - **Detailed Correction Guidance Panel**: Added instructive feedback panel with step-by-step corrections
-  - New panel displays below reference image with detailed, color-coded guidance
-  - Each feedback item shows both WHAT to correct and HOW to correct it
-  - Green (success), Yellow (warning), and Red (error) color coding for clarity
-  - Scrollable panel for multiple correction points
-- **Camera Optimization**: Enhanced camera settings for smooth pose tracking
-  - Resolution increased to 1280x720 for better pose detection accuracy
-  - Frame rate optimized: 30fps ideal, 60fps maximum for smooth tracking
-  - Improved video quality reduces false positives in pose validation
-- **Fixed Scoring Accuracy** (Critical Fix):
-  - Fixed random scoring issue caused by using low-confidence keypoints
-  - ALL keypoints now checked for minimum confidence before use in calculations
-  - Scoring normalized against total possible score (100) for consistency
-  - Partial pose detection now properly warns users and gives accurate percentages
-  - Example: If only 1 of 4 checks detects 60%, score is 15% (not 60%), accurately reflecting incomplete pose
-- **Improved Validation Logic**:
-  - Tadasana validation completely rewritten with detailed feedback
-  - Confidence checks prevent "random" angles from undetected keypoints
-  - Users warned when fewer than 3 of 4 body parts detected
-  - Clear instructions on repositioning for better camera visibility
+- **Camera Optimization**: Enhanced camera settings for smooth pose tracking (1280x720, 30-60fps)
+- **Fixed Scoring Accuracy**: Confidence checks prevent "random" angles from undetected keypoints
+- **Improved Validation Logic**: Tadasana validation rewritten with detailed feedback
