@@ -130,22 +130,21 @@ The AR correction system provides real-time visual feedback on yoga pose accurac
 
 **Solution**: Angle-based validation system with normalized scoring (0-100%) and color-coded visual feedback.
 
-**Supported Poses**:
+**Supported Poses** (Simplified to 3 Core Poses):
 1. **Tadasana (Mountain Pose)** - Beginner
    - Validates: Body alignment, feet position, shoulder level
    - Key checks: Side angles (165-180°), feet distance, shoulder symmetry
+   - Reference image: `assets/poses/tadasana.jpg`
 
-2. **Adho Mukha Svanasana (Downward Dog)** - Intermediate
-   - Validates: Inverted V shape, leg straightness, hip elevation, hand/feet balance
-   - Key checks: Hip-shoulder-wrist angle (60-90°), leg extension (160-180°)
+2. **Vrikshasana (Tree Pose)** - Beginner
+   - Validates: Standing leg balance, raised foot position, hand placement
+   - Key checks: Balance on one leg, foot placement on inner thigh, hands in prayer position
+   - Reference image: `assets/poses/vrikshasana.jpg`
 
-3. **Virabhadrasana III (Warrior III)** - Advanced
-   - Validates: Standing leg straightness, torso horizontal alignment, lifted leg extension, hip level
-   - Key checks: Balance, body parallel to ground, hip squaring
-
-4. **Namastey (Prayer Pose)** - Beginner
+3. **Namastey (Prayer Pose)** - Beginner
    - Validates: Hand position at chest center, elbow angles, shoulder relaxation
    - Key checks: Hands together, elbow angles (80-110°), shoulder symmetry
+   - Reference image: `assets/poses/namaste.png`
 
 ### Scoring System
 
@@ -206,7 +205,21 @@ finalScore = (overallScore / (checks * 25)) * 100
 
 ### Recent Changes (November 6, 2025)
 
-#### Posture Correction UX Enhancements (Latest)
+#### Simplified Pose Library & Image-Based References (Latest - Session 2)
+- **Reduced to 3 Core Poses**: Removed all poses except the essential beginner poses
+  - Tadasana (Mountain Pose)
+  - Vrikshasana (Tree Pose) 
+  - Namastey (Prayer Pose)
+- **Replaced Videos with Static Images**: Removed video reference system and replaced with generated reference images
+  - All 3 poses now have professional AI-generated demonstration images
+  - Images show correct form for pose validation
+  - Stored in `assets/poses/` directory
+  - Images use static img element instead of video element for better performance
+- **Cleaned Up Assets**: Removed unused pose images and video directory
+  - Deleted reference_videos directory
+  - Removed images for deprecated poses (Downward Dog, Warrior III, Natarajasana, Baddha Konasana)
+
+#### Posture Correction UX Enhancements (Session 1)
 - **Reference Video Display**: Added video playback for reference poses
   - Displays correct form videos for Tadasana and Vrikshasana poses
   - Graceful fallback to placeholder emoji for poses without videos
