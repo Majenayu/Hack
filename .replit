@@ -4,7 +4,7 @@ expertMode = true
 
 [nix]
 channel = "stable-25_05"
-packages = ["espeak-ng", "geckodriver"]
+packages = ["espeak-ng", "geckodriver", "portaudio"]
 
 [workflows]
 runButton = "Project"
