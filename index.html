@@ -540,7 +540,7 @@
             checkPose(keypoints, poseName) {
                 const getPoint = (name) => {
                     const kp = keypoints.find(k => k.name === name);
-                    if (!kp || kp.score < this.MIN_CONFIDENCE) return null;
+                    if (!kp || kp.score < MIN_CONFIDENCE) return null;
                     return { x: kp.x, y: kp.y };
                 };
                 
@@ -928,7 +928,7 @@
              */
             drawKeypoints(video, keypoints, ctx, affectedKeypoints, corrections) {
                 keypoints.forEach((keypoint, index) => {
-                    if (keypoint.score > this.MIN_CONFIDENCE) {
+                    if (keypoint.score > MIN_CONFIDENCE) {
                         // Coordinates need to be adjusted for the mirrored video feed
                         const x = video.videoWidth - keypoint.x;
                         const y = keypoint.y;
@@ -974,7 +974,7 @@
                     const kp1 = keypoints.find(k => k.id === i);
                     const kp2 = keypoints.find(k => k.id === j);
 
-                    if (kp1 && kp2 && kp1.score > this.MIN_CONFIDENCE && kp2.score > this.MIN_CONFIDENCE) {
+                    if (kp1 && kp2 && kp1.score > MIN_CONFIDENCE && kp2.score > MIN_CONFIDENCE) {
                         
                         const kp1Name = Object.keys(this.keypointIndices).find(name => this.keypointIndices[name] === i);
                         const kp2Name = Object.keys(this.keypointIndices).find(name => this.keypointIndices[name] === j);
